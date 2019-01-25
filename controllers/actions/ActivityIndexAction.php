@@ -9,9 +9,10 @@
 namespace app\controllers\actions;
 
 use app\components\ActivityComponent;
+use app\components\base\BaseController;
 use yii\base\Action;
 
-class ActivityIndexAction extends Action
+class ActivityIndexAction extends BaseController
 {
     public function run(){
 
@@ -19,7 +20,7 @@ class ActivityIndexAction extends Action
         $comp = \Yii::$app->activity;
         $activity = $comp->getModelActivity();
 
-        \Yii::$app->view->params['menu_label'] = 'Мой лэйбл';
+
 
         return $this->controller->render('index', ['model' => $activity, 'menu_label' => 'Мой лэйбл']);
     }
