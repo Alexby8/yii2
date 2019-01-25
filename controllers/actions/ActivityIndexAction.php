@@ -12,7 +12,7 @@ use app\components\ActivityComponent;
 use app\components\base\BaseController;
 use yii\base\Action;
 
-class ActivityIndexAction extends BaseController
+class ActivityIndexAction extends Action
 {
     public function run(){
 

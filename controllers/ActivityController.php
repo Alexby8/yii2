@@ -9,10 +9,11 @@
 namespace app\controllers;
 
 
+use app\components\base\BaseController;
 use app\controllers\actions\ActivityIndexAction;
 use yii\web\Controller;
 
-class ActivityController extends Controller
+class ActivityController extends BaseController
 {
 
     public function actions(){
