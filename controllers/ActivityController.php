@@ -11,6 +11,10 @@ namespace app\controllers;
 
 use app\components\base\BaseController;
 use app\controllers\actions\ActivityIndexAction;
+use app\controllers\actions\ActivityListAction;
+use app\controllers\actions\ActivityAddAction;
+use app\controllers\actions\ActivityEditAction;
+use app\controllers\actions\ActivityViewAction;
 use app\models\Activity;
 use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
@@ -22,7 +26,11 @@ class ActivityController extends BaseController
 
     public function actions(){
         return [
-            'index' => ['class' => ActivityIndexAction::class]
+            'index' => ['class' => ActivityListAction::class],
+            'list' => ['class' => ActivityListAction::class],
+            'add' => ['class' => ActivityAddAction::class],
+            'edit' => ['class' => ActivityEditAction::class],
+            'view' => ['class' => ActivityViewAction::class],
         ];
     }
 

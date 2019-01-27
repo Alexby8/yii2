@@ -2,25 +2,22 @@
 /**
  * Created by PhpStorm.
  * User: Алексей
- * Date: 23.01.2019
- * Time: 21:30
+ * Date: 27.01.2019
+ * Time: 15:49
  */
 
 namespace app\controllers\actions;
 
-use app\components\ActivityComponent;
-use app\components\base\BaseController;
 use app\models\Activity;
 use yii\base\Action;
+use app\components\ActivityComponent;
 use yii\bootstrap\ActiveForm;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
-
-class ActivityIndexAction extends Action
+class ActivityAddAction extends Action
 {
     public function run(){
-
         /** @var ActivityComponent $comp */
         $comp = \Yii::$app->activity;
         /** @var Activity $activity */
@@ -35,11 +32,17 @@ class ActivityIndexAction extends Action
 
             if($activity->validate()){
                 /** @var UploadedFile document */
-                $activity->document=UploadedFile::getInstance($activity,'document');
-                $activity->document->saveAs(\Yii::getAlias('@app/files/'.mt_rand(0,100).'.'.$activity->document->getExtension()));
+                $activity->documents = UploadedFile::getInstances($activity, 'documents');
 
+                if(count($activity->documents)){
+                    foreach ($activity->documents as $file) {
+                        $name = time().mt_rand(0,100);
+                        $file->saveAs(\Yii::getAlias('@app/web/upload/'.$name.'.'.$file->getExtension()));
+                    }
+                }
             }
         }
-        return $this->controller->render('index', ['model' => $activity, 'menu_label' => 'Мой лэйбл']);
+
+        return $this->controller->render('add', ['model' => $activity]);
     }
 }

@@ -21,37 +21,18 @@ class Activity extends Model
     public $is_repeat;
     public $is_blocked;
     public $email;
-    public $email_repeat;
-    public $count;
-    public $document;
-
-    const SCENARIO_CUSTUM='my_scenario';
-
-    public function scenarios()
-    {
-        return array_merge([
-                self::SCENARIO_CUSTUM=>['title','description'],
-            ]
-            ,parent::scenarios());
-    }
+    public $documents;
 
     public function rules()
     {
         return [
-            [['title'], 'required','on'=>self::SCENARIO_CUSTUM],
-//            [['is_repeat', 'is_blocked'], 'boolean'],
-//            ['email', 'string', 'min' => 3,'max' => '30'],
-//            [['title','description','email'],'trim'],
-//            ['email','email'],
-//            ['email_repeat','compare','compareAttribute' => 'email'],
-//            ['email','required','when' => function($model){
-//                return $model->is_repeat==1;
-//            }],
-//            ['is_repeat','in','range' => [0,1,2,3]],
-//            ['date_start','date','format' => 'php:Y-m-d'],
-//            ['title',NotAdminValiadtion::class],
-//            ['title','match','pattern' => '/[a-zа-яА-ЯA-Z]{1,}/','message' => 'Только буквы'],
-            ['document','file','extensions' => ['pdf','png','jpg']],
+            [['title', 'description', 'date_start', 'email'], 'required'],
+            [['is_repeat', 'is_blocked'], 'boolean'],
+            ['email', 'string', 'min' => 3,'max' => '30'],
+            [['title','description','email'],'trim'],
+            ['email','email'],
+            ['date_start','date','format' => 'php:Y-m-d'],
+            ['documents','file','extensions' => ['pdf','png','jpg', 'xls', 'xlsx', 'word'], 'maxFiles' => 20],
         ];
     }
 
@@ -73,11 +54,13 @@ class Activity extends Model
     public function attributeLabels()
     {
         return [
-            "title" => "Заголовок активности",
-            "description" => "Описание события",
+            "title" => "Заголовок",
+            "description" => "Описание",
             "date_start" => "Дата начала",
             "is_repeat" => "Повторяющееся",
             "is_blocked" => "Блокирующее",
+            "email" => "E-mail",
+            "documents" => "Документы",
         ];
     }
 }
