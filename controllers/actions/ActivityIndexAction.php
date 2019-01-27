@@ -11,6 +11,7 @@ namespace app\controllers\actions;
 use app\components\ActivityComponent;
 use yii\base\Action;
 
+
 class ActivityIndexAction extends Action
 {
     public function run(){
