@@ -1,13 +1,16 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db_local.php';
+$db = file_exists( __DIR__.'/db_local.php')
+    ?(require __DIR__ . '/db_local.php')
+    :(require __DIR__ . '/db.php');
 
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'language' => 'ru-RU',
     'bootstrap' => ['log'],
+    'defaultRoute'=>'activity',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
