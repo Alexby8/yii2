@@ -16,15 +16,17 @@ $form = \yii\bootstrap\ActiveForm::begin(
 );
 
 ?>
+    <h2 class="m-b-40">Добавление события</h2>
+
     <?=$form->field($model, 'title');?>
     <?=$form->field($model, 'description')->textarea();?>
-    <?=$form->field($model,'email');?>
-    <?=$form->field($model,'date_start');?>
-    <?=$form->field($model,'is_repeat')->checkbox();?>
-    <?=$form->field($model,'document')->fileInput();?>
+    <?=$form->field($model, 'email');?>
+    <?=$form->field($model, 'date_start');?>
+    <?=$form->field($model, 'is_repeat')->checkbox();?>
+    <?=$form->field($model, 'documents[]')->fileInput(['multiple' => 'multiple']);?>
 
     <div class="form-group">
-        <button class="btn btn-default" type="submit">Отправить</button>
+        <button class="btn btn-success" type="submit">Создать событие</button>
     </div>
 
 <?php
