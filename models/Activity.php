@@ -9,11 +9,9 @@
 namespace app\models;
 
 
-use app\models\validations\NotAdminValiadtion;
-use phpDocumentor\Reflection\Types\Self_;
 use yii\base\Model;
 
-class Activity extends Model
+class Activity extends ActivityBase
 {
     public $title;
     public $description;
@@ -25,7 +23,7 @@ class Activity extends Model
 
     public function rules()
     {
-        return [
+        return array_merge([
             [['title', 'description', 'date_start', 'email'], 'required'],
             [['is_repeat', 'is_blocked'], 'boolean'],
             ['email', 'string', 'min' => 3,'max' => '30'],
@@ -33,7 +31,7 @@ class Activity extends Model
             ['email','email'],
             ['date_start','date','format' => 'php:Y-m-d'],
             ['documents','file','extensions' => ['pdf','png','jpg', 'xls', 'xlsx', 'word'], 'maxFiles' => 20],
-        ];
+        ], parent::rules());
     }
 
     public function notAdminText($attribute){
