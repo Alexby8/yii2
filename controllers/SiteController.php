@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\components\base\BaseController;
+use app\base\BaseController;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;

@@ -14,35 +14,49 @@ use app\components\ActivityComponent;
 use yii\bootstrap\ActiveForm;
 use yii\web\Response;
 use yii\web\UploadedFile;
+use yii\web\HttpException;
 
 class ActivityEditAction extends Action
 {
-    public function run(){
+    public function run($id){
+
+        $date_format = \Yii::$app->params["date_formats"]["activity_form"];
+
+        if(\Yii::$app->user->isGuest){
+            throw new HttpException(401, 'User not auth');
+        }
+
         /** @var ActivityComponent $comp */
         $comp = \Yii::$app->activity;
         /** @var Activity $activity */
-        $activity = $comp->getModelActivity();
+        $model = $comp->getModelActivityFromId($id);
+        //echo "<pre>"; print_r($model); echo "</pre>";
+
+        if(!\Yii::$app->user->can('authorActivity', ['activity' => $model])){
+            throw new HttpException(401, 'Bad permissions');
+        }
+
+        if(!\Yii::$app->user->can('viewActivity')){
+            throw new HttpException(401, 'Bad permissions');
+        }
 
         if(\Yii::$app->request->isPost){
-            $activity->load(\Yii::$app->request->post());
-            if(\Yii::$app->request->isAjax){
-                \Yii::$app->response->format=Response::FORMAT_JSON;
-                return ActiveForm::validate($activity);
-            }
+            $model->load(\Yii::$app->request->post());
 
-            if($activity->validate()){
-                /** @var UploadedFile document */
-                $activity->documents = UploadedFile::getInstances($activity, 'documents');
-
-                if(count($activity->documents)){
-                    foreach ($activity->documents as $file) {
-                        $name = time().mt_rand(0,100);
-                        $file->saveAs(\Yii::getAlias('@app/web/upload/'.$name.'.'.$file->getExtension()));
-                    }
-                }
+            if($comp->updateActivity($model)){
+                return $this->controller->redirect(['/activity/view', 'id' => $model->id]);
             }
         }
 
-        return $this->controller->render('edit', ['model' => $activity]);
+        if($model->dateStart){
+            $date=\DateTime::createFromFormat('Y-m-d H:i:s',$model->dateStart);
+            $model->dateStart=$date->format($date_format);
+        }
+        if($model->dateEnd){
+            $date=\DateTime::createFromFormat('Y-m-d H:i:s',$model->dateEnd);
+            $model->dateEnd=$date->format($date_format);
+        }
+
+        return $this->controller->render('add', ['model' => $model]);
     }
 }

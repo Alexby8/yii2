@@ -9,7 +9,6 @@
 namespace app\controllers\actions;
 
 use app\components\ActivityComponent;
-use app\components\base\BaseController;
 use app\models\Activity;
 use yii\base\Action;
 use yii\bootstrap\ActiveForm;

@@ -8,7 +8,7 @@
 
 namespace app\controllers;
 
-use app\components\base\BaseController;
+use app\base\BaseController;
 use app\controllers\actions\DaysIndexAction;
 use yii\web\Controller;
 
