@@ -9,7 +9,7 @@
 namespace app\controllers;
 
 
-use app\components\base\BaseController;
+use app\base\BaseController;
 use app\controllers\actions\ActivityIndexAction;
 use app\controllers\actions\ActivityListAction;
 use app\controllers\actions\ActivityAddAction;

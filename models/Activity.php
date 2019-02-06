@@ -9,28 +9,13 @@
 namespace app\models;
 
 
-use yii\base\Model;
-
 class Activity extends ActivityBase
 {
-    public $title;
-    public $description;
-    public $date_start;
-    public $is_repeat;
-    public $is_blocked;
-    public $email;
-    public $documents;
-
     public function rules()
     {
         return array_merge([
-            [['title', 'description', 'date_start', 'email'], 'required'],
-            [['is_repeat', 'is_blocked'], 'boolean'],
-            ['email', 'string', 'min' => 3,'max' => '30'],
-            [['title','description','email'],'trim'],
-            ['email','email'],
-            ['date_start','date','format' => 'php:Y-m-d'],
-            ['documents','file','extensions' => ['pdf','png','jpg', 'xls', 'xlsx', 'word'], 'maxFiles' => 20],
+            [['isRepeatable', 'isBlocking'], 'boolean'],
+            [['title','description'],'trim'],
         ], parent::rules());
     }
 
@@ -42,10 +27,30 @@ class Activity extends ActivityBase
 
     public function beforeValidate()
     {
-//        if($this->date_start){
-//            $date=\DateTime::createFromFormat('d.m.Y',$this->date_start);
-//            $this->date_start=$date->format('Y-m-d');
-//        }
+        $date_format = \Yii::$app->params["date_formats"]["activity_form"];
+
+        if($this->dateStart){
+            $date=\DateTime::createFromFormat($date_format,$this->dateStart);
+            if(!$date){
+                return parent::beforeValidate();
+            }
+            $this->dateStart=$date->format('Y-m-d H:i:s');
+        }
+
+        if($this->dateEnd){
+            $date=\DateTime::createFromFormat($date_format,$this->dateEnd);
+            if(!$date){
+                return parent::beforeValidate();
+            }
+            $this->dateEnd=$date->format('Y-m-d H:i:s');
+
+            if(strtotime($this->dateEnd) < strtotime($this->dateStart)){
+                $this->dateEnd = $this->dateStart;
+            }
+        }else{
+            $this->dateEnd = $this->dateStart;
+        }
+
         return parent::beforeValidate();
     }
 
@@ -54,11 +59,10 @@ class Activity extends ActivityBase
         return [
             "title" => "Заголовок",
             "description" => "Описание",
-            "date_start" => "Дата начала",
-            "is_repeat" => "Повторяющееся",
-            "is_blocked" => "Блокирующее",
-            "email" => "E-mail",
-            "documents" => "Документы",
+            "dateStart" => "Дата начала",
+            "dateEnd" => "Дата окончания",
+            "isRepeatable" => "Повторяющееся",
+            "isBlocking" => "Блокирующее",
         ];
     }
 }

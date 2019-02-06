@@ -117,3 +117,6 @@ a.desc:after {
 .m-b-40{
     margin-bottom: 40px;
 }
+.p-r{
+    position: relative;
+}

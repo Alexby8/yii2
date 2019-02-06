@@ -9,7 +9,7 @@
 namespace app\controllers;
 
 
-use app\components\base\BaseController;
+use app\base\BaseController;
 use app\components\DaoComponent;
 use yii\web\Controller;
 
